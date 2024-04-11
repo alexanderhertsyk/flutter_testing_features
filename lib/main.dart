@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'pages/add_remove_widget_page.dart';
+import 'pages/welcome_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: AddRemoveWidgetPage());
+    return MaterialApp(
+      initialRoute: WelcomePage.route,
+      routes: {
+        WelcomePage.route: (context) => const WelcomePage(),
+        AddRemoveWidgetPage.route: (context) => const AddRemoveWidgetPage(),
+      },
+    );
   }
 }

@@ -5,6 +5,8 @@ import '../widgets/add_remove_widget.dart';
 class AddRemoveWidgetPage extends StatefulWidget {
   const AddRemoveWidgetPage({super.key});
 
+  static const route = '/add_remove_widget';
+
   @override
   State<AddRemoveWidgetPage> createState() => _AddRemoveWidgetPageState();
 }
@@ -15,6 +17,9 @@ class _AddRemoveWidgetPageState extends State<AddRemoveWidgetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(AddRemoveWidgetPage.route),
+      ),
       body: SafeArea(
         child: Center(
           child: AddRemoveWidget(hasSecondWidget: _hasSecondWidget),
