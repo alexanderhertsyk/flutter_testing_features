@@ -26,9 +26,8 @@ class _AddRemoveWidgetPageState extends State<AddRemoveWidgetPage> {
         ),
       ),
       floatingActionButton: IconButton(
-        color: Colors.red,
         onPressed: () => setState(() => _hasSecondWidget = !_hasSecondWidget),
-        icon: const Icon(Icons.update),
+        icon: Icon(_hasSecondWidget ? Icons.remove_circle : Icons.add_circle),
       ),
     );
   }

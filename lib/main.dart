@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testing_features/pages/animation_page.dart';
 
 import 'pages/add_remove_widget_page.dart';
 import 'pages/welcome_page.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         WelcomePage.route: (context) => const WelcomePage(),
         AddRemoveWidgetPage.route: (context) => const AddRemoveWidgetPage(),
+        AnimationPage.route: (context) => const AnimationPage(),
       },
     );
   }
