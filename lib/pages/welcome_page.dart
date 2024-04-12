@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:testing_features/pages/add_remove_widget_page.dart';
-import 'package:testing_features/pages/animation_page.dart';
-import 'package:testing_features/widgets/nav_button.dart';
+
+import '../widgets/nav_button.dart';
+import 'add_remove_widget_page.dart';
+import 'animation_page.dart';
+import 'paint_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -17,6 +19,7 @@ class WelcomePage extends StatelessWidget {
           children: [
             NavButton(route: AddRemoveWidgetPage.route),
             NavButton(route: AnimationPage.route),
+            NavButton(route: PaintPage.route),
           ],
         ),
       ),

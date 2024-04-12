@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:testing_features/pages/animation_page.dart';
 
 import 'pages/add_remove_widget_page.dart';
+import 'pages/animation_page.dart';
+import 'pages/paint_page.dart';
 import 'pages/welcome_page.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         WelcomePage.route: (context) => const WelcomePage(),
         AddRemoveWidgetPage.route: (context) => const AddRemoveWidgetPage(),
         AnimationPage.route: (context) => const AnimationPage(),
+        PaintPage.route: (context) => const PaintPage(),
       },
     );
   }
