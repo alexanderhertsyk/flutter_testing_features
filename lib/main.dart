@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'pages/add_remove_widget_page.dart';
 import 'pages/animation_page.dart';
+import 'pages/isolates_page.dart';
 import 'pages/paint_page.dart';
 import 'pages/web_request_page.dart';
 import 'pages/welcome_page.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         AnimationPage.route: (context) => const AnimationPage(),
         PaintPage.route: (context) => const PaintPage(),
         WebRequestPage.route: (context) => const WebRequestPage(),
+        IsolatesPage.route: (context) => const IsolatesPage(),
       },
     );
   }

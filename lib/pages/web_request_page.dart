@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:testing_features/models/news_model.dart';
@@ -9,7 +8,7 @@ import 'package:testing_features/models/news_model.dart';
 class WebRequestPage extends StatefulWidget {
   const WebRequestPage({super.key});
 
-  static const String route = '/web_request_page';
+  static const String route = '/web_request';
 
   @override
   State<WebRequestPage> createState() => _WebRequestPageState();
