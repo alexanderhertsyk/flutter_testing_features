@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/isolated_worker.dart';
+import '../../models/news_model.dart';
 
 class IsolatesDartPage extends StatefulWidget {
   const IsolatesDartPage({super.key});
@@ -12,6 +13,9 @@ class IsolatesDartPage extends StatefulWidget {
 }
 
 class _IsolatesDartPageState extends State<IsolatesDartPage> {
+  List<NewsModel> news = <NewsModel>[];
+  bool get isLoading => news.isEmpty;
+
   @override
   void initState() {
     super.initState();
@@ -22,7 +26,23 @@ class _IsolatesDartPageState extends State<IsolatesDartPage> {
   Future<void> loadNews() async {
     final worker = WorkerWithIsolates();
     await worker.spawn();
-    await worker.parseJson('{"key":"value"}');
+    var news =
+        await worker.getNews('https://jsonplaceholder.typicode.com/posts');
+    setState(() => this.news = news);
+  }
+
+  Widget getBody() => isLoading ? getLoadingIndicator() : getListView();
+
+  Widget getLoadingIndicator() =>
+      const Center(child: CircularProgressIndicator());
+
+  Widget getListView() {
+    return ListView.builder(
+      itemBuilder: (context, i) => Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text('Row ${news[i].title}'),
+      ),
+    );
   }
 
   @override
@@ -31,6 +51,7 @@ class _IsolatesDartPageState extends State<IsolatesDartPage> {
       appBar: AppBar(
         title: const Text(IsolatesDartPage.route),
       ),
+      body: getBody(),
     );
   }
 }
