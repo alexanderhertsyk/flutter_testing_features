@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:testing_features/models/news_model.dart';
+
+import '../components/news.dart';
+import '../models/news_model.dart';
 
 class WebRequestPage extends StatefulWidget {
   const WebRequestPage({super.key});
@@ -15,24 +15,10 @@ class WebRequestPage extends StatefulWidget {
 }
 
 class _WebRequestPageState extends State<WebRequestPage> {
-  static const int ok = 200;
   List<NewsModel> news = <NewsModel>[];
 
-  Future<List<NewsModel>> getNews() async {
-    var uri = Uri.parse('https://jsonplaceholder.typicode.com/posts');
-    var response = await http.get(uri);
-
-    if (response.statusCode == ok) {
-      var newsList = jsonDecode(response.body) as List;
-
-      return newsList.map((json) => NewsModel.fromJson(json)).toList();
-    }
-
-    return List.empty();
-  }
-
   void refreshNews() async {
-    var news = await getNews();
+    var news = await getNews('https://jsonplaceholder.typicode.com/posts');
     setState(() => this.news = news);
   }
 

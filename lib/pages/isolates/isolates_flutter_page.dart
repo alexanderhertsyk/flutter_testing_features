@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
+import '../../components/news.dart';
 import '../../models/news_model.dart';
 
 class IsolatesFlutterPage extends StatefulWidget {
@@ -46,14 +45,7 @@ class _IsolatesFlutterPageState extends State<IsolatesFlutterPage> {
     await for (final dynamic msg in isolatedPort) {
       final mainSender = msg[1] as SendPort;
       final url = msg[0] as String;
-      final Uri dataURL = Uri.parse(url);
-      final http.Response response = await http.get(dataURL);
-      List<NewsModel> news = List.empty();
-
-      if (response.statusCode == 200) {
-        var newsList = jsonDecode(response.body) as List;
-        news = newsList.map((json) => NewsModel.fromJson(json)).toList();
-      }
+      var news = await getNews(url);
 
       mainSender.send(news);
     }
