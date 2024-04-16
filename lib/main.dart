@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'pages/isolates/isolates_dart_page.dart';
+import 'pages/isolates/isolates_flutter_page.dart';
 import 'pages/add_remove_widget_page.dart';
 import 'pages/animation_page.dart';
-import 'pages/isolates_page.dart';
+import 'pages/Isolates/isolates_page.dart';
 import 'pages/paint_page.dart';
 import 'pages/web_request_page.dart';
 import 'pages/welcome_page.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,6 +25,8 @@ class MyApp extends StatelessWidget {
         PaintPage.route: (context) => const PaintPage(),
         WebRequestPage.route: (context) => const WebRequestPage(),
         IsolatesPage.route: (context) => const IsolatesPage(),
+        IsolatesFlutterPage.route: (context) => const IsolatesFlutterPage(),
+        IsolatesDartPage.route: (context) => const IsolatesDartPage(),
       },
     );
   }

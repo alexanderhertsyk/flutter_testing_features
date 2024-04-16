@@ -4,18 +4,18 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/news_model.dart';
+import '../../models/news_model.dart';
 
-class IsolatesPage extends StatefulWidget {
-  const IsolatesPage({super.key});
+class IsolatesFlutterPage extends StatefulWidget {
+  const IsolatesFlutterPage({super.key});
 
-  static const route = '/isolates';
+  static const route = '/isolates_flutter';
 
   @override
-  State<IsolatesPage> createState() => _IsolatesPageState();
+  State<IsolatesFlutterPage> createState() => _IsolatesFlutterPageState();
 }
 
-class _IsolatesPageState extends State<IsolatesPage> {
+class _IsolatesFlutterPageState extends State<IsolatesFlutterPage> {
   List<NewsModel> news = <NewsModel>[];
   bool get isLoading => news.isEmpty;
 
@@ -36,7 +36,6 @@ class _IsolatesPageState extends State<IsolatesPage> {
       mainReceiver.sendPort,
     ]);
     var news = await mainReceiver.first as List<NewsModel>;
-    print(news.length);
     setState(() => this.news = news);
   }
 
@@ -50,8 +49,6 @@ class _IsolatesPageState extends State<IsolatesPage> {
       final Uri dataURL = Uri.parse(url);
       final http.Response response = await http.get(dataURL);
       List<NewsModel> news = List.empty();
-
-      print(response.statusCode);
 
       if (response.statusCode == 200) {
         var newsList = jsonDecode(response.body) as List;
@@ -80,7 +77,7 @@ class _IsolatesPageState extends State<IsolatesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(IsolatesPage.route),
+        title: const Text(IsolatesFlutterPage.route),
       ),
       body: getBody(),
     );
