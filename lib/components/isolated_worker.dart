@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:isolate';
 
-import 'package:http/http.dart' as http;
-
 import '../models/news_model.dart';
+import 'news.dart' as news_maker;
 
 class WorkerWithIsolates {
   late SendPort _isolateSender;
@@ -45,15 +43,7 @@ class WorkerWithIsolates {
   }
 
   static void _downloadNews(String url) async {
-    final Uri dataURL = Uri.parse(url);
-    final http.Response response = await http.get(dataURL);
-    List<NewsModel> news = List.empty();
-
-    if (response.statusCode == 200) {
-      var newsList = jsonDecode(response.body) as List;
-      news = newsList.map((json) => NewsModel.fromJson(json)).toList();
-    }
-
+    var news = await news_maker.getNews(url);
     _mainSender.send(news);
   }
 }

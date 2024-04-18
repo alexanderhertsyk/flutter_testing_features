@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/nav_button.dart';
 import 'isolates_dart_page.dart';
+import 'isolates_dart_robust_page.dart';
 import 'isolates_flutter_page.dart';
 
 class IsolatesPage extends StatelessWidget {
@@ -20,6 +21,7 @@ class IsolatesPage extends StatelessWidget {
         children: [
           NavButton(route: IsolatesFlutterPage.route),
           NavButton(route: IsolatesDartPage.route),
+          NavButton(route: IsolatesDartRobustPage.route),
         ],
       ),
     );
