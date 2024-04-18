@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'pages/images_page.dart';
 import 'pages/isolates/isolates_dart_page.dart';
 import 'pages/isolates/isolates_dart_robust_page.dart';
 import 'pages/isolates/isolates_flutter_page.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         IsolatesDartPage.route: (context) => const IsolatesDartPage(),
         IsolatesDartRobustPage.route: (context) =>
             const IsolatesDartRobustPage(),
+        ImagesPage.route: (context) => const ImagesPage(),
       },
     );
   }
