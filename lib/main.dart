@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 
+import 'components/app_locale.dart';
 import 'pages/images_page.dart';
 import 'pages/isolates/isolates_dart_page.dart';
 import 'pages/isolates/isolates_dart_robust_page.dart';
@@ -7,14 +9,52 @@ import 'pages/isolates/isolates_flutter_page.dart';
 import 'pages/add_remove_widget_page.dart';
 import 'pages/animation_page.dart';
 import 'pages/Isolates/isolates_page.dart';
+import 'pages/localization_page.dart';
 import 'pages/paint_page.dart';
 import 'pages/web_request_page.dart';
 import 'pages/welcome_page.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final FlutterLocalization localization = FlutterLocalization.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initLocalizations();
+  }
+
+  void initLocalizations() {
+    localization.init(
+      mapLocales: [
+        // TODO: replace w/ named enum
+        const MapLocale('en', AppLocale.en),
+        const MapLocale('ru', AppLocale.ru),
+        const MapLocale('by', AppLocale.by),
+        const MapLocale('fr', AppLocale.fr),
+        const MapLocale('de', AppLocale.de),
+        const MapLocale('it', AppLocale.it),
+        const MapLocale('sp', AppLocale.sp),
+        const MapLocale('pt', AppLocale.pt),
+        const MapLocale('zh', AppLocale.zh),
+        const MapLocale('jp', AppLocale.jp),
+        const MapLocale('hi', AppLocale.hi),
+      ],
+      initLanguageCode: 'en',
+    );
+    localization.onTranslatedLanguage = onTranslatedLanguage;
+  }
+
+  void onTranslatedLanguage(Locale? locale) => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +72,10 @@ class MyApp extends StatelessWidget {
         IsolatesDartRobustPage.route: (context) =>
             const IsolatesDartRobustPage(),
         ImagesPage.route: (context) => const ImagesPage(),
+        LocalizationsPage.route: (context) => const LocalizationsPage(),
       },
+      supportedLocales: localization.supportedLocales,
+      localizationsDelegates: localization.localizationsDelegates,
     );
   }
 }
