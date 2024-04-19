@@ -1,35 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
-import 'package:testing_features/components/app_locale.dart';
 
-class LocalizationsPage extends StatefulWidget {
+import '../components/app_locale.dart';
+import '../widgets/flutter_localization_dropdown.dart';
+
+class LocalizationsPage extends StatelessWidget {
   const LocalizationsPage({super.key});
 
   static const route = '/localizations';
 
   @override
-  State<LocalizationsPage> createState() => _LocalizationsPageState();
-}
-
-class _LocalizationsPageState extends State<LocalizationsPage> {
-  final FlutterLocalization localization = FlutterLocalization.instance;
-  int i = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(LocalizationsPage.route),
+        title: const Text(route),
       ),
-      body: Text(AppLocale.testText.getString(context)),
-      floatingActionButton: IconButton(
-        icon: const Icon(Icons.language),
-        onPressed: () {
-          var locale = localization.supportedLocales.elementAt(i++);
-          localization.translate(locale.languageCode);
-
-          if (i == localization.supportedLocales.length) i = 0;
-        },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Flutter localization package:'),
+            const FlutterLocalizationDropdown(),
+            Text(AppLocale.testText.getString(context)),
+          ],
+        ),
       ),
     );
   }
