@@ -5,6 +5,7 @@ import 'add_remove_widget_page.dart';
 import 'animation_page.dart';
 import 'Isolates/isolates_page.dart';
 import 'images_page.dart';
+import 'layouts_page.dart';
 import 'localization_page.dart';
 import 'paint_page.dart';
 import 'web_request_page.dart';
@@ -29,6 +30,7 @@ class WelcomePage extends StatelessWidget {
             NavButton(route: IsolatesPage.route),
             NavButton(route: ImagesPage.route),
             NavButton(route: LocalizationsPage.route),
+            NavButton(route: LayoutsPage.route),
           ],
         ),
       ),
