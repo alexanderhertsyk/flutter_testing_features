@@ -1,20 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LayoutsPage extends StatefulWidget {
-  const LayoutsPage({super.key});
+class GridViewPage extends StatefulWidget {
+  const GridViewPage({super.key});
 
-  static const route = '/layouts';
+  static const route = '/gridview';
 
   @override
-  State<LayoutsPage> createState() => _LayoutsPageState();
+  State<GridViewPage> createState() => _GridViewPageState();
 }
 
-class _LayoutsPageState extends State<LayoutsPage> {
+class _GridViewPageState extends State<GridViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(LayoutsPage.route)),
+      appBar: AppBar(title: const Text(GridViewPage.route)),
       body: GridView.count(
         crossAxisCount: 2,
         children: List<Widget>.generate(

@@ -10,7 +10,8 @@ import 'pages/isolates/isolates_flutter_page.dart';
 import 'pages/add_remove_widget_page.dart';
 import 'pages/animation_page.dart';
 import 'pages/Isolates/isolates_page.dart';
-import 'pages/layouts_page.dart';
+import 'pages/layouts/grid_page.dart';
+import 'pages/layouts/layouts_page.dart';
 import 'pages/localization_page.dart';
 import 'pages/paint_page.dart';
 import 'pages/web_request_page.dart';
@@ -73,8 +74,9 @@ class _MyAppState extends State<MyApp> {
             const IsolatesDartRobustPage(),
         ImagesPage.route: (context) => const ImagesPage(),
         LocalizationsPage.route: (context) => const LocalizationsPage(),
-        LayoutsPage.route: (context) => const LayoutsPage(),
         AppStatePage.route: (context) => const AppStatePage(),
+        LayoutsPage.route: (context) => const LayoutsPage(),
+        GridViewPage.route: (context) => const GridViewPage(),
       },
       supportedLocales: localization.supportedLocales,
       localizationsDelegates: localization.localizationsDelegates,
