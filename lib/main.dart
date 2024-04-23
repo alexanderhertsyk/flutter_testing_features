@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 
 import 'components/app_locale.dart';
+import 'pages/app_state_page.dart';
 import 'pages/images_page.dart';
 import 'pages/isolates/isolates_dart_page.dart';
 import 'pages/isolates/isolates_dart_robust_page.dart';
@@ -52,10 +53,8 @@ class _MyAppState extends State<MyApp> {
       ],
       initLanguageCode: 'en',
     );
-    localization.onTranslatedLanguage = onTranslatedLanguage;
+    localization.onTranslatedLanguage = (_) => setState(() {});
   }
-
-  void onTranslatedLanguage(Locale? locale) => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         ImagesPage.route: (context) => const ImagesPage(),
         LocalizationsPage.route: (context) => const LocalizationsPage(),
         LayoutsPage.route: (context) => const LayoutsPage(),
+        AppStatePage.route: (context) => const AppStatePage(),
       },
       supportedLocales: localization.supportedLocales,
       localizationsDelegates: localization.localizationsDelegates,
