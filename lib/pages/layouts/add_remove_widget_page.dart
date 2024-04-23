@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/add_remove_widget.dart';
+import '../../widgets/add_remove_widget.dart';
 
 class AddRemoveWidgetPage extends StatefulWidget {
   const AddRemoveWidgetPage({super.key});

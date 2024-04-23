@@ -7,11 +7,12 @@ import 'pages/images_page.dart';
 import 'pages/isolates/isolates_dart_page.dart';
 import 'pages/isolates/isolates_dart_robust_page.dart';
 import 'pages/isolates/isolates_flutter_page.dart';
-import 'pages/add_remove_widget_page.dart';
+import 'pages/layouts/add_remove_widget_page.dart';
 import 'pages/animation_page.dart';
-import 'pages/Isolates/isolates_page.dart';
+import 'pages/isolates/isolates_page.dart';
 import 'pages/layouts/grid_page.dart';
 import 'pages/layouts/layouts_page.dart';
+import 'pages/layouts/scrollview_page.dart';
 import 'pages/layouts/stack_page.dart';
 import 'pages/localization_page.dart';
 import 'pages/paint_page.dart';
@@ -79,6 +80,7 @@ class _MyAppState extends State<MyApp> {
         LayoutsPage.route: (context) => const LayoutsPage(),
         GridViewPage.route: (context) => const GridViewPage(),
         StackPage.route: (context) => const StackPage(),
+        ScrollviewPage.route: (context) => const ScrollviewPage(),
       },
       supportedLocales: localization.supportedLocales,
       localizationsDelegates: localization.localizationsDelegates,
