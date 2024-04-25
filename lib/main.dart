@@ -3,6 +3,7 @@ import 'package:flutter_localization/flutter_localization.dart';
 
 import 'components/app_locale.dart';
 import 'pages/app_state_page.dart';
+import 'pages/game_page.dart';
 import 'pages/images_page.dart';
 import 'pages/isolates/isolates_dart_page.dart';
 import 'pages/isolates/isolates_dart_robust_page.dart';
@@ -81,6 +82,7 @@ class _MyAppState extends State<MyApp> {
         GridViewPage.route: (context) => const GridViewPage(),
         StackPage.route: (context) => const StackPage(),
         ScrollviewPage.route: (context) => const ScrollviewPage(),
+        GamePage.route: (context) => const GamePage(),
       },
       supportedLocales: localization.supportedLocales,
       localizationsDelegates: localization.localizationsDelegates,

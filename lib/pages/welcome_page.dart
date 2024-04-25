@@ -4,6 +4,7 @@ import '../widgets/nav_button.dart';
 import 'animation_page.dart';
 import 'Isolates/isolates_page.dart';
 import 'app_state_page.dart';
+import 'game_page.dart';
 import 'images_page.dart';
 import 'layouts/layouts_page.dart';
 import 'localization_page.dart';
@@ -31,6 +32,7 @@ class WelcomePage extends StatelessWidget {
             NavButton(route: LocalizationsPage.route),
             NavButton(route: AppStatePage.route),
             NavButton(route: LayoutsPage.route),
+            NavButton(route: GamePage.route),
           ],
         ),
       ),
