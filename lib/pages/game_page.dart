@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../models/sign.dart';
+
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
 
@@ -9,15 +11,27 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-enum CZ { empty, zero, cross }
-
 class _GamePageState extends State<GamePage> {
   static const int length = 3;
+  static const int size = length * length;
 
-  final List<List<CZ>> values = List.generate(
-      length, (_) => List.generate(length, (_) => CZ.empty),
-      growable: false);
-  bool isCross = false;
+  late List<Sign?> signs;
+  int move = 0;
+
+  List<Sign?> get initSigns =>
+      List.generate(size, (_) => null, growable: false);
+
+  @override
+  void initState() {
+    super.initState();
+
+    signs = initSigns;
+  }
+
+  void reset() {
+    move = 0;
+    setState(() => signs = initSigns);
+  }
 
   bool checkResult() {
     return true;
@@ -25,47 +39,34 @@ class _GamePageState extends State<GamePage> {
 
   void resetOldValues() {}
 
-  void onTap(int i, int j) {
-    setState(() {
-      values[i][j] = isCross ? CZ.cross : CZ.zero;
-    });
+  void onTap(int i) {
+    if (signs[i] != null) return;
 
-    isCross = !isCross;
+    move++;
+    bool isCross = move % 2 != 0;
+
+    setState(() => signs[i] = Sign(isCross: isCross, order: 0));
   }
 
-  IconData? getValue(CZ value) {
-    return switch (value) {
-      CZ.empty => null,
-      CZ.zero => Icons.circle_outlined,
-      CZ.cross => Icons.close
-    };
+  IconData? getIcon(Sign? sign) {
+    if (sign == null) return null;
+
+    return sign.isCross ? Icons.close : Icons.circle_outlined;
   }
 
-  Widget getField(int i, int j) {
+  Widget getField(int i) {
     return GestureDetector(
-      onTap: () => onTap(i, j),
+      onTap: () => onTap(i),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.black54,
-            width: 0.3,
+            width: 0.5,
           ),
         ),
-        child: Icon(getValue(values[i][j])),
+        child: Icon(getIcon(signs[i])),
       ),
     );
-  }
-
-  List<Widget> getFields() {
-    List<Widget> fields = [];
-
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
-        fields.add(getField(i, j));
-      }
-    }
-
-    return fields;
   }
 
   @override
@@ -75,10 +76,17 @@ class _GamePageState extends State<GamePage> {
         title: const Text(GamePage.route),
       ),
       body: Center(
-        child: GridView.count(
-          crossAxisCount: 3,
-          children: getFields(),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: length,
+          ),
+          itemCount: size,
+          itemBuilder: (BuildContext context, int i) => getField(i),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: reset,
+        child: const Icon(Icons.refresh),
       ),
     );
   }
