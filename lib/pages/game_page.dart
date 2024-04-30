@@ -108,7 +108,13 @@ class _GamePageState extends State<GamePage> {
   Color? getColor(Sign? sign) {
     if (sign == null) return null;
 
-    return sign.isWin ? Colors.green : Colors.black;
+    return sign.isWin
+        ? Colors.green
+        : switch (sign.move - move) {
+            -5 || -4 => Colors.black26,
+            -3 || -2 => Colors.black54,
+            _ => Colors.black
+          };
   }
 
   Widget getField(int i) {
