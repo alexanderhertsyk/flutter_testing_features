@@ -14,21 +14,20 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   static const int length = 3;
   static const int size = length * length;
+  static const int minMovesToWin = length + length - 1;
+  static final List<Sign?> emptySigns =
+      List.generate(size, (_) => null, growable: false);
 
-  final List<List<List<int>>> winLines = List.generate(size, (i) => []);
-  late List<Sign?> signs;
+  List<Sign?> signs = emptySigns;
   int move = 0;
   bool gameOver = false;
-
-  List<Sign?> get initSigns =>
-      List.generate(size, (_) => null, growable: false);
+  final List<List<List<int>>> fieldWinLines = List.generate(size, (i) => []);
 
   @override
   void initState() {
     super.initState();
 
     setupWinLines();
-    signs = initSigns;
   }
 
   void setupWinLines() {
@@ -46,47 +45,46 @@ class _GamePageState extends State<GamePage> {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < checkLines.length; j++) {
         if (checkLines[j].contains(i)) {
-          winLines[i].add(checkLines[j]);
+          fieldWinLines[i].add(checkLines[j]);
         }
+      }
+    }
+  }
+
+  void makeMove(int i) {
+    move++;
+    bool isCrossTurn = move % 2 == 1;
+    setState(() => signs[i] = Sign(isCross: isCrossTurn, fromMove: move));
+
+    if (move >= minMovesToWin) checkWin(fieldIndex: i, turn: isCrossTurn);
+  }
+
+  void checkWin({required int fieldIndex, required bool? turn}) {
+    for (var winLine in fieldWinLines[fieldIndex]) {
+      if (winLine.every((x) => signs[x]?.isCross == turn)) {
+        gameOver = true;
+        highlightWinLine(winLine);
+
+        return;
       }
     }
   }
 
   void reset() {
     move = 0;
-    setState(() => signs = initSigns);
+    setState(() => signs = emptySigns);
     gameOver = false;
   }
 
-  List<int>? checkWin(int i, bool? isCross) {
-    for (var line in winLines[i]) {
-      if (line.every((x) => signs[x]?.isCross == isCross)) {
-        return line;
-      }
+  void highlightWinLine(List<int> winLineIndexes) {
+    for (var i in winLineIndexes) {
+      setState(() => signs[i] = Sign.win(signs[i]!));
     }
-
-    return null;
   }
 
   void onTap(int i) {
-    if (gameOver || signs[i] != null) return;
-
-    move++;
-    bool isCross = move % 2 == 1;
-    setState(() => signs[i] = Sign(isCross: isCross, order: 0));
-
-    var winLine = checkWin(i, isCross);
-
-    if (winLine != null) {
-      gameOver = true;
-      highlightWinLine(winLine);
-    }
-  }
-
-  void highlightWinLine(List<int> winLine) {
-    for (var i in winLine) {
-      setState(() => signs[i] = Sign.win(signs[i]!));
-    }
+    var canMove = !gameOver && signs[i] == null;
+    if (canMove) makeMove(i);
   }
 
   IconData? getIcon(Sign? sign) {
@@ -132,7 +130,7 @@ class _GamePageState extends State<GamePage> {
             crossAxisCount: length,
           ),
           itemCount: size,
-          itemBuilder: (BuildContext context, int i) => getField(i),
+          itemBuilder: (context, i) => getField(i),
         ),
       ),
       floatingActionButton: FloatingActionButton(

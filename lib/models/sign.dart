@@ -1,13 +1,14 @@
 class Sign {
   final bool isCross;
-  // TODO: replace w/ enum?
-  final int order;
-  final bool isWin;
+  final int fromMove;
+  final bool _isWin;
 
-  Sign({required this.isCross, required this.order, this.isWin = false});
+  bool get isWin => _isWin;
+
+  Sign({required this.isCross, required this.fromMove}) : _isWin = false;
 
   Sign.win(Sign sign)
       : isCross = sign.isCross,
-        order = sign.order,
-        isWin = true;
+        fromMove = sign.fromMove,
+        _isWin = true;
 }
