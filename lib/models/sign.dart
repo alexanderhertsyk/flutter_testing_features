@@ -1,14 +1,14 @@
 class Sign {
   final bool isCross;
-  final int fromMove;
+  final int move;
   final bool _isWin;
 
   bool get isWin => _isWin;
 
-  Sign({required this.isCross, required this.fromMove}) : _isWin = false;
+  Sign({required this.isCross, required this.move}) : _isWin = false;
 
   Sign.win(Sign sign)
       : isCross = sign.isCross,
-        fromMove = sign.fromMove,
+        move = sign.move,
         _isWin = true;
 }

@@ -15,23 +15,24 @@ class _GamePageState extends State<GamePage> {
   static const int length = 3;
   static const int size = length * length;
   static const int minMovesToWin = length + length - 1;
-  static final List<Sign?> emptySigns =
-      List.generate(size, (_) => null, growable: false);
+  static const int maxSignsOnBoard = 2 * length;
 
-  List<Sign?> signs = emptySigns;
-  int move = 0;
-  bool gameOver = false;
   final List<List<List<int>>> fieldWinLines = List.generate(size, (i) => []);
+
+  late List<Sign?> signs;
+  late int move;
+  late bool gameOver;
 
   @override
   void initState() {
     super.initState();
 
     setupWinLines();
+    reset();
   }
 
   void setupWinLines() {
-    List<List<int>> checkLines = [
+    List<List<int>> allLines = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -43,9 +44,9 @@ class _GamePageState extends State<GamePage> {
     ];
 
     for (int i = 0; i < size; i++) {
-      for (int j = 0; j < checkLines.length; j++) {
-        if (checkLines[j].contains(i)) {
-          fieldWinLines[i].add(checkLines[j]);
+      for (int j = 0; j < allLines.length; j++) {
+        if (allLines[j].contains(i)) {
+          fieldWinLines[i].add(allLines[j]);
         }
       }
     }
@@ -54,9 +55,16 @@ class _GamePageState extends State<GamePage> {
   void makeMove(int i) {
     move++;
     bool isCrossTurn = move % 2 == 1;
-    setState(() => signs[i] = Sign(isCross: isCrossTurn, fromMove: move));
+    setState(() => signs[i] = Sign(isCross: isCrossTurn, move: move));
 
+    if (move > maxSignsOnBoard) removeExtraSign();
     if (move >= minMovesToWin) checkWin(fieldIndex: i, turn: isCrossTurn);
+  }
+
+  void removeExtraSign() {
+    var extraSignIndex =
+        signs.indexWhere((x) => x != null && move - x.move == maxSignsOnBoard);
+    setState(() => signs[extraSignIndex] = null);
   }
 
   void checkWin({required int fieldIndex, required bool? turn}) {
@@ -72,17 +80,21 @@ class _GamePageState extends State<GamePage> {
 
   void reset() {
     move = 0;
-    setState(() => signs = emptySigns);
+    setState(() => signs = List.generate(size, (_) => null, growable: false));
     gameOver = false;
   }
 
   void highlightWinLine(List<int> winLineIndexes) {
+    var tempSigns = signs.toList();
+
     for (var i in winLineIndexes) {
-      setState(() => signs[i] = Sign.win(signs[i]!));
+      tempSigns[i] = Sign.win(tempSigns[i]!);
     }
+
+    setState(() => signs = tempSigns);
   }
 
-  void onTap(int i) {
+  void onFieldTap(int i) {
     var canMove = !gameOver && signs[i] == null;
     if (canMove) makeMove(i);
   }
@@ -101,7 +113,7 @@ class _GamePageState extends State<GamePage> {
 
   Widget getField(int i) {
     return GestureDetector(
-      onTap: () => onTap(i),
+      onTap: () => onFieldTap(i),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
