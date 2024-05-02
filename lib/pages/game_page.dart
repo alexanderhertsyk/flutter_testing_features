@@ -12,10 +12,13 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  static const int length = 3;
-  static const int size = length * length;
-  static const int minMovesToWin = length + length - 1;
-  static const int maxSignsOnBoard = 2 * length;
+  static const int defaultWinCount = 3;
+  static const int defaultRowCount = defaultWinCount;
+  static const int defaultColumnCount = defaultWinCount;
+  static const int size = defaultRowCount * defaultColumnCount;
+
+  static const int minMovesToWin = defaultWinCount + defaultWinCount - 1;
+  static const int maxSignsOnBoard = 2 * defaultWinCount;
 
   final List<List<List<int>>> fieldWinLines = List.generate(size, (i) => []);
 
@@ -29,6 +32,86 @@ class _GamePageState extends State<GamePage> {
 
     setupWinLines();
     reset();
+  }
+
+  void setupRows(
+      {int rowCount = defaultRowCount,
+      int columnCount = defaultColumnCount,
+      int winCount = defaultWinCount}) {
+    if (columnCount < winCount) return; // TODO: add column's check
+    List<List<int>> board = [
+      [00, 01, 02, 03],
+      [04, 05, 06, 07],
+      [08, 09, 10, 11],
+      [12, 13, 14, 15],
+      [16, 17, 18, 19],
+    ];
+
+    var r = [
+      [00, 01, 02],
+      [01, 02, 03],
+      [04, 05, 06],
+      [05, 06, 07],
+      [08, 09, 10],
+      [09, 10, 11],
+      [12, 13, 14],
+      [13, 14, 15],
+    ];
+    var c = [
+      [00, 04, 08],
+      [04, 08, 12],
+      [01, 05, 09],
+      [05, 09, 13],
+      [02, 06, 10],
+      [06, 10, 14],
+      [03, 07, 11],
+      [07, 11, 15],
+    ];
+    var d1 = [
+      [00, 05, 10],
+      [01, 06, 11],
+      [04, 09, 14],
+      [05, 10, 15],
+    ];
+    var d2 = [
+      [02, 05, 08],
+      [03, 06, 09],
+      [06, 09, 12],
+      [07, 10, 13],
+    ];
+
+    var l = List.generate(winCount, (i) => i);
+    List<List<int>> availableRows = [];
+
+    if (winCount <= columnCount) {
+      for (int r = 0; r < rowCount; r++) {
+        for (int i = 0; i <= columnCount - winCount; i++) {
+          availableRows.add(l.map((j) => r * columnCount + i + j).toList());
+        }
+      }
+    }
+
+    print('Rows');
+    print1(availableRows);
+    List<List<int>> availableColumns = [];
+
+    if (winCount <= rowCount) {
+      for (int c = 0; c < columnCount; c++) {
+        for (int i = 0; i <= rowCount - winCount; i++) {
+          availableColumns
+              .add(l.map((j) => c + (i + j) * columnCount).toList());
+        }
+      }
+    }
+
+    print('Columns');
+    print1(availableColumns);
+  }
+
+  void print1(List<List<int>> lines) {
+    for (var i in lines) {
+      print(i.join(' '));
+    }
   }
 
   void setupWinLines() {
@@ -79,6 +162,8 @@ class _GamePageState extends State<GamePage> {
   }
 
   void reset() {
+    setupRows(rowCount: 5, columnCount: 4, winCount: 3);
+
     move = 0;
     setState(() => signs = List.generate(size, (_) => null, growable: false));
     gameOver = false;
@@ -144,8 +229,9 @@ class _GamePageState extends State<GamePage> {
       ),
       body: Center(
         child: GridView.builder(
+          primary: false,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: length,
+            crossAxisCount: defaultWinCount,
           ),
           itemCount: size,
           itemBuilder: (context, i) => getField(i),
