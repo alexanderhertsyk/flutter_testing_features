@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/sign.dart';
@@ -34,51 +36,11 @@ class _GamePageState extends State<GamePage> {
     reset();
   }
 
-  void setupRows(
+  void generateAllWinLines(
       {int rowCount = defaultRowCount,
       int columnCount = defaultColumnCount,
       int winCount = defaultWinCount}) {
     if (columnCount < winCount) return; // TODO: add column's check
-    List<List<int>> board = [
-      [00, 01, 02, 03],
-      [04, 05, 06, 07],
-      [08, 09, 10, 11],
-      [12, 13, 14, 15],
-      [16, 17, 18, 19],
-    ];
-
-    var r = [
-      [00, 01, 02],
-      [01, 02, 03],
-      [04, 05, 06],
-      [05, 06, 07],
-      [08, 09, 10],
-      [09, 10, 11],
-      [12, 13, 14],
-      [13, 14, 15],
-    ];
-    var c = [
-      [00, 04, 08],
-      [04, 08, 12],
-      [01, 05, 09],
-      [05, 09, 13],
-      [02, 06, 10],
-      [06, 10, 14],
-      [03, 07, 11],
-      [07, 11, 15],
-    ];
-    var d1 = [
-      [00, 05, 10],
-      [01, 06, 11],
-      [04, 09, 14],
-      [05, 10, 15],
-    ];
-    var d2 = [
-      [02, 05, 08],
-      [03, 06, 09],
-      [06, 09, 12],
-      [07, 10, 13],
-    ];
 
     var l = List.generate(winCount, (i) => i);
     List<List<int>> availableRows = [];
@@ -91,8 +53,7 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
-    print('Rows');
-    print1(availableRows);
+    print1('Rows', availableRows);
     List<List<int>> availableColumns = [];
 
     if (winCount <= rowCount) {
@@ -104,13 +65,34 @@ class _GamePageState extends State<GamePage> {
       }
     }
 
-    print('Columns');
-    print1(availableColumns);
+    print1('Columns', availableColumns);
+    List<List<int>> availableDiagonals = [];
+
+    if (winCount <= min(rowCount, columnCount)) {
+      for (int r = 0; r <= rowCount - winCount; r++) {
+        var shift = r * columnCount;
+
+        for (int i = 0; i <= columnCount - winCount; i++) {
+          availableDiagonals
+              .add(l.map((j) => shift + i + j * (columnCount + 1)).toList());
+          availableDiagonals.add(l
+              .map((j) => shift + (columnCount - i - 1) + j * (columnCount - 1))
+              .toList());
+        }
+      }
+    }
+
+    print1('Diagonals', availableDiagonals);
+    print1(
+        'Board',
+        List.generate(rowCount,
+            (i) => List.generate(columnCount, (j) => i * columnCount + j)));
   }
 
-  void print1(List<List<int>> lines) {
+  void print1(String title, List<List<int>> lines) {
+    print(title);
     for (var i in lines) {
-      print(i.join(' '));
+      print(i.map((e) => '${e < 10 ? '0' : ''}$e').join(' '));
     }
   }
 
@@ -162,7 +144,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   void reset() {
-    setupRows(rowCount: 5, columnCount: 4, winCount: 3);
+    generateAllWinLines(rowCount: 3, columnCount: 3, winCount: 3);
 
     move = 0;
     setState(() => signs = List.generate(size, (_) => null, growable: false));
