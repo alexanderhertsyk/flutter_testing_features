@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../components/settings.dart';
 import '../models/sign.dart';
 
 class GamePage extends StatefulWidget {
@@ -14,104 +15,73 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  static const int defaultWinCount = 3;
-  static const int defaultRowCount = defaultWinCount;
-  static const int defaultColumnCount = defaultWinCount;
-  static const int size = defaultRowCount * defaultColumnCount;
+  final Settings settings = Settings();
+  late int rowCount = settings.rowCount;
+  late int columnCount = settings.columnCount;
+  late int size = rowCount * columnCount;
+  late int winCount = settings.winCount;
+  late int minWinMoves = Settings.kDefaultPlayers * winCount - 1;
+  late int maxSignsOnBoard = Settings.kDefaultPlayers * winCount;
 
-  static const int minMovesToWin = defaultWinCount + defaultWinCount - 1;
-  static const int maxSignsOnBoard = 2 * defaultWinCount;
-
-  final List<List<List<int>>> fieldWinLines = List.generate(size, (i) => []);
-
+  final List<List<List<int>>> fieldWinLines = [];
+  int move = 0;
+  bool gameOver = false;
   late List<Sign?> signs;
-  late int move;
-  late bool gameOver;
 
   @override
   void initState() {
     super.initState();
 
-    setupWinLines();
+    initWinLines();
     reset();
   }
 
-  void generateAllWinLines(
-      {int rowCount = defaultRowCount,
-      int columnCount = defaultColumnCount,
-      int winCount = defaultWinCount}) {
-    if (columnCount < winCount) return; // TODO: add column's check
-
+  List<List<int>> generateWinLines() {
+    List<List<int>> winLines = [];
     var l = List.generate(winCount, (i) => i);
-    List<List<int>> availableRows = [];
-
+    // generate win rows
     if (winCount <= columnCount) {
-      for (int r = 0; r < rowCount; r++) {
+      for (int k = 0; k < rowCount; k++) {
         for (int i = 0; i <= columnCount - winCount; i++) {
-          availableRows.add(l.map((j) => r * columnCount + i + j).toList());
+          winLines.add(l.map((j) => k * columnCount + i + j).toList());
         }
       }
     }
-
-    print1('Rows', availableRows);
-    List<List<int>> availableColumns = [];
-
+    // generate win columns
     if (winCount <= rowCount) {
-      for (int c = 0; c < columnCount; c++) {
+      for (int k = 0; k < columnCount; k++) {
         for (int i = 0; i <= rowCount - winCount; i++) {
-          availableColumns
-              .add(l.map((j) => c + (i + j) * columnCount).toList());
+          winLines.add(l.map((j) => k + (i + j) * columnCount).toList());
         }
       }
     }
-
-    print1('Columns', availableColumns);
-    List<List<int>> availableDiagonals = [];
-
+    // generate win diagonals
     if (winCount <= min(rowCount, columnCount)) {
       for (int r = 0; r <= rowCount - winCount; r++) {
         var shift = r * columnCount;
 
         for (int i = 0; i <= columnCount - winCount; i++) {
-          availableDiagonals
+          winLines
               .add(l.map((j) => shift + i + j * (columnCount + 1)).toList());
-          availableDiagonals.add(l
+          winLines.add(l
               .map((j) => shift + (columnCount - i - 1) + j * (columnCount - 1))
               .toList());
         }
       }
     }
 
-    print1('Diagonals', availableDiagonals);
-    print1(
-        'Board',
-        List.generate(rowCount,
-            (i) => List.generate(columnCount, (j) => i * columnCount + j)));
+    return winLines;
   }
 
-  void print1(String title, List<List<int>> lines) {
-    print(title);
-    for (var i in lines) {
-      print(i.map((e) => '${e < 10 ? '0' : ''}$e').join(' '));
-    }
-  }
-
-  void setupWinLines() {
-    List<List<int>> allLines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
+  void initWinLines() {
+    var winLines = generateWinLines();
 
     for (int i = 0; i < size; i++) {
-      for (int j = 0; j < allLines.length; j++) {
-        if (allLines[j].contains(i)) {
-          fieldWinLines[i].add(allLines[j]);
+      fieldWinLines.add([]);
+
+      for (int j = 0; j < winLines.length; j++) {
+        if (winLines[j].contains(i)) {
+          fieldWinLines[i].add(winLines[j]);
         }
       }
     }
@@ -123,7 +93,7 @@ class _GamePageState extends State<GamePage> {
     setState(() => signs[i] = Sign(isCross: isCrossTurn, move: move));
 
     if (move > maxSignsOnBoard) removeExtraSign();
-    if (move >= minMovesToWin) checkWin(fieldIndex: i, turn: isCrossTurn);
+    if (move >= minWinMoves) checkWin(fieldIndex: i, turn: isCrossTurn);
   }
 
   void removeExtraSign() {
@@ -144,8 +114,6 @@ class _GamePageState extends State<GamePage> {
   }
 
   void reset() {
-    generateAllWinLines(rowCount: 3, columnCount: 3, winCount: 3);
-
     move = 0;
     setState(() => signs = List.generate(size, (_) => null, growable: false));
     gameOver = false;
@@ -212,8 +180,8 @@ class _GamePageState extends State<GamePage> {
       body: Center(
         child: GridView.builder(
           primary: false,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: defaultWinCount,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columnCount,
           ),
           itemCount: size,
           itemBuilder: (context, i) => getField(i),

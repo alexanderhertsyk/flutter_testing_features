@@ -17,6 +17,7 @@ import 'pages/layouts/scrollview_page.dart';
 import 'pages/layouts/stack_page.dart';
 import 'pages/localization_page.dart';
 import 'pages/paint_page.dart';
+import 'pages/settings_page.dart';
 import 'pages/web_request_page.dart';
 import 'pages/welcome_page.dart';
 
@@ -83,6 +84,7 @@ class _MyAppState extends State<MyApp> {
         StackPage.route: (context) => const StackPage(),
         ScrollviewPage.route: (context) => const ScrollviewPage(),
         GamePage.route: (context) => const GamePage(),
+        SettingsPage.route: (context) => const SettingsPage(),
       },
       supportedLocales: localization.supportedLocales,
       localizationsDelegates: localization.localizationsDelegates,
